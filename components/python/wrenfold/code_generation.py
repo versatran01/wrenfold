@@ -133,8 +133,8 @@ def create_function_description(
     spec = inspect.getfullargspec(func=func)
     description = FunctionDescription(name=name or func.__name__)
 
-    cached_types: dict[type, type_info.CustomType] = dict()
-    kwargs = dict()
+    cached_types: dict[type[typing.Any], type_info.CustomType] = dict()
+    kwargs: dict[str, object] = {}
     for arg_name in spec.args:
         if arg_name not in spec.annotations:
             raise KeyError(f"Missing type annotation for argument: {arg_name}")
@@ -297,7 +297,7 @@ def generate_python(
     convert_ternaries: bool | None = None,
     context: dict[str, typing.Any] | None = None,
     import_target_module: bool = True,
-) -> tuple[typing.Callable, str]:
+) -> tuple[typing.Callable[..., object], str]:
     """
     Code-generate a symbolic function as python code, then ``exec`` the code and return a python
     function that implements the symbolic function numerically.
@@ -445,7 +445,7 @@ def generate_python(
 
             globals_in["np"] = np
 
-    locals_in_out = dict()
+    locals_in_out: dict[str, object] = {}
     try:
         # Security: exec is not great, but ultimately the code executed here is constrained in scope
         # and functionality.
@@ -454,7 +454,7 @@ def generate_python(
         print("Encountered exception while evaluating:")
         print(code)
         raise
-    return locals_in_out[func.__name__], code
+    return typing.cast(typing.Callable[..., object], locals_in_out[func.__name__]), code
 
 
 def mkdir_and_write_file(code: str, path: str | pathlib.Path) -> None:
