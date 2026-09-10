@@ -358,11 +358,14 @@ void wrap_matrix_operations(py::module_& m) {
            "Invoke :func:`wrenfold.sym.distribute` on every element of the matrix.")
       .def("subs", make_substitute_wrapper_single<matrix_expr, scalar_expr>(), py::arg("target"),
            py::arg("substitute"),
+           py::sig("def subs(self, target: Expr, substitute: Expr | int | float) -> MatrixExpr"),
            "Overload of ``subs`` that performs a single scalar-valued substitution.")
       .def("subs", make_substitute_wrapper_single<matrix_expr, boolean_expr>(), py::arg("target"),
            py::arg("substitute"),
            "Overload of ``subs`` that performs a single boolean-valued substitution.")
       .def("subs", &substitute_wrapper<matrix_expr>, py::arg("pairs"),
+           py::sig("def subs(self, pairs: typing.Sequence[tuple[Expr, Expr | int | float] | "
+                   "tuple[BooleanExpr, BooleanExpr]]) -> MatrixExpr"),
            "Invoke :func:`wrenfold.sym.subs` on every element of the matrix.")
       .def(
           "eval",

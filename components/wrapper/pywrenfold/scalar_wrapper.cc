@@ -198,9 +198,12 @@ void wrap_scalar_operations(py::module_& m) {
           docstrings::scalar_expr_diff.data())
       .def("distribute", &scalar_expr::distribute, "See :func:`wrenfold.sym.distribute`.")
       .def("subs", &substitute_wrapper<scalar_expr>, py::arg("pairs"),
+           py::sig("def subs(self, pairs: typing.Sequence[tuple[Expr, Expr | int | float] | "
+                   "tuple[BooleanExpr, BooleanExpr]]) -> Expr"),
            "See :func:`wrenfold.sym.subs`.")
       .def("subs", make_substitute_wrapper_single<scalar_expr, scalar_expr>(), py::arg("target"),
            py::arg("substitute"),
+           py::sig("def subs(self, target: Expr, substitute: Expr | int | float) -> Expr"),
            "Overload of ``subs`` that performs a single scalar-valued substitution.")
       .def("subs", make_substitute_wrapper_single<scalar_expr, boolean_expr>(), py::arg("target"),
            py::arg("substitute"),
@@ -327,30 +330,52 @@ void wrap_scalar_operations(py::module_& m) {
         const relative_order order = order_by(a, b);
         return static_cast<int>(order);
       },
-      "a"_a, "b"_a, docstrings::compare.data());
+      "a"_a, "b"_a, py::sig("def compare(a: Expr | int | float, b: Expr | int | float) -> int"),
+      docstrings::compare.data());
 
   // Built-in functions:
-  m.def("log", &wf::log, "arg"_a, docstrings::log.data());
-  m.def("exp", &wf::exp, "arg"_a, docstrings::exp.data());
-  m.def("pow", &wf::pow, "base"_a, "exp"_a, docstrings::pow.data());
-  m.def("cos", &wf::cos, "arg"_a, docstrings::cos.data());
-  m.def("sin", &wf::sin, "arg"_a, docstrings::sin.data());
-  m.def("tan", &wf::tan, "arg"_a, docstrings::tan.data());
-  m.def("acos", &wf::acos, "arg"_a, docstrings::acos.data());
-  m.def("asin", &wf::asin, "arg"_a, docstrings::asin.data());
-  m.def("atan", &wf::atan, "arg"_a, docstrings::atan.data());
-  m.def("cosh", &wf::cosh, "arg"_a, docstrings::cosh.data());
-  m.def("sinh", &wf::sinh, "arg"_a, docstrings::sinh.data());
-  m.def("tanh", &wf::tanh, "arg"_a, docstrings::tanh.data());
-  m.def("acosh", &wf::acosh, "arg"_a, docstrings::acosh.data());
-  m.def("asinh", &wf::asinh, "arg"_a, docstrings::asinh.data());
-  m.def("atanh", &wf::atanh, "arg"_a, docstrings::atanh.data());
-  m.def("sqrt", &wf::sqrt, "arg"_a, docstrings::sqrt.data());
+  m.def("log", &wf::log, "arg"_a, py::sig("def log(arg: Expr | int | float) -> Expr"),
+        docstrings::log.data());
+  m.def("exp", &wf::exp, "arg"_a, py::sig("def exp(arg: Expr | int | float) -> Expr"),
+        docstrings::exp.data());
+  m.def("pow", &wf::pow, "base"_a, "exp"_a,
+        py::sig("def pow(base: Expr | int | float, exp: Expr | int | float) -> Expr"),
+        docstrings::pow.data());
+  m.def("cos", &wf::cos, "arg"_a, py::sig("def cos(arg: Expr | int | float) -> Expr"),
+        docstrings::cos.data());
+  m.def("sin", &wf::sin, "arg"_a, py::sig("def sin(arg: Expr | int | float) -> Expr"),
+        docstrings::sin.data());
+  m.def("tan", &wf::tan, "arg"_a, py::sig("def tan(arg: Expr | int | float) -> Expr"),
+        docstrings::tan.data());
+  m.def("acos", &wf::acos, "arg"_a, py::sig("def acos(arg: Expr | int | float) -> Expr"),
+        docstrings::acos.data());
+  m.def("asin", &wf::asin, "arg"_a, py::sig("def asin(arg: Expr | int | float) -> Expr"),
+        docstrings::asin.data());
+  m.def("atan", &wf::atan, "arg"_a, py::sig("def atan(arg: Expr | int | float) -> Expr"),
+        docstrings::atan.data());
+  m.def("cosh", &wf::cosh, "arg"_a, py::sig("def cosh(arg: Expr | int | float) -> Expr"),
+        docstrings::cosh.data());
+  m.def("sinh", &wf::sinh, "arg"_a, py::sig("def sinh(arg: Expr | int | float) -> Expr"),
+        docstrings::sinh.data());
+  m.def("tanh", &wf::tanh, "arg"_a, py::sig("def tanh(arg: Expr | int | float) -> Expr"),
+        docstrings::tanh.data());
+  m.def("acosh", &wf::acosh, "arg"_a, py::sig("def acosh(arg: Expr | int | float) -> Expr"),
+        docstrings::acosh.data());
+  m.def("asinh", &wf::asinh, "arg"_a, py::sig("def asinh(arg: Expr | int | float) -> Expr"),
+        docstrings::asinh.data());
+  m.def("atanh", &wf::atanh, "arg"_a, py::sig("def atanh(arg: Expr | int | float) -> Expr"),
+        docstrings::atanh.data());
+  m.def("sqrt", &wf::sqrt, "arg"_a, py::sig("def sqrt(arg: Expr | int | float) -> Expr"),
+        docstrings::sqrt.data());
   m.def("abs", static_cast<scalar_expr (*)(const scalar_expr&)>(&wf::abs), "arg"_a,
-        docstrings::abs.data());
-  m.def("sign", &wf::signum, "arg"_a, docstrings::sign.data());
-  m.def("floor", &wf::floor, "arg"_a, docstrings::floor.data());
-  m.def("atan2", &wf::atan2, "y"_a, "x"_a, docstrings::atan2.data());
+        py::sig("def abs(arg: Expr | int | float) -> Expr"), docstrings::abs.data());
+  m.def("sign", &wf::signum, "arg"_a, py::sig("def sign(arg: Expr | int | float) -> Expr"),
+        docstrings::sign.data());
+  m.def("floor", &wf::floor, "arg"_a, py::sig("def floor(arg: Expr | int | float) -> Expr"),
+        docstrings::floor.data());
+  m.def("atan2", &wf::atan2, "y"_a, "x"_a,
+        py::sig("def atan2(y: Expr | int | float, x: Expr | int | float) -> Expr"),
+        docstrings::atan2.data());
 
   m.def("max", &wf::max, "a"_a, "b"_a,
         py::sig("def max(a: Expr | int | float, b: Expr | int | float) -> Expr"),
@@ -361,7 +386,10 @@ void wrap_scalar_operations(py::module_& m) {
   m.def("where",
         static_cast<scalar_expr (*)(const boolean_expr&, const scalar_expr&, const scalar_expr&)>(
             &wf::where),
-        "c"_a, "a"_a, "b"_a, docstrings::where.data());
+        "c"_a, "a"_a, "b"_a,
+        py::sig("def where(c: BooleanExpr, a: Expr | int | float, b: Expr | int | float) -> "
+                "Expr"),
+        docstrings::where.data());
 
   // Relational operations:
   m.def("lt", static_cast<boolean_expr (*)(const scalar_expr&, const scalar_expr&)>(&operator<),
@@ -387,8 +415,12 @@ void wrap_scalar_operations(py::module_& m) {
 
   m.def("iverson", &wf::iverson, "arg"_a, docstrings::iverson.data());
 
-  m.def("unevaluated", &wf::make_unevaluated, "arg"_a, docstrings::unevaluated.data());
-  m.def("stop_derivative", &wf::stop_diff, "arg"_a, docstrings::stop_derivative.data());
+  m.def("unevaluated", &wf::make_unevaluated, "arg"_a,
+        py::sig("def unevaluated(arg: Expr | int | float) -> Expr"),
+        docstrings::unevaluated.data());
+  m.def("stop_derivative", &wf::stop_diff, "arg"_a,
+        py::sig("def stop_derivative(arg: Expr | int | float) -> Expr"),
+        docstrings::stop_derivative.data());
 
   m.def(
       "eliminate_subexpressions",
@@ -415,11 +447,14 @@ void wrap_scalar_operations(py::module_& m) {
   m.def(
       "addition",
       [](const std::vector<scalar_expr>& args) { return addition::from_operands(args); },
-      py::arg("args"), "Construct addition expression from provided operands.");
+      py::arg("args"), py::sig("def addition(args: typing.Sequence[Expr | int | float]) -> Expr"),
+      "Construct addition expression from provided operands.");
   m.def(
       "multiplication",
       [](const std::vector<scalar_expr>& args) { return multiplication::from_operands(args); },
-      py::arg("args"), "Construct multiplication expression from provided operands.");
+      py::arg("args"),
+      py::sig("def multiplication(args: typing.Sequence[Expr | int | float]) -> Expr"),
+      "Construct multiplication expression from provided operands.");
 
   wrap_class<symbolic_function>(m, "Function")
       .def(py::init<std::string>(), py::arg("name"),
@@ -433,13 +468,17 @@ void wrap_scalar_operations(py::module_& m) {
                 self, transform_map<symbolic_function_invocation::container_type>(
                           args, [](const py::handle& x) { return py::cast<scalar_expr>(x); }));
           },
+          py::sig("def __call__(self, *args: Expr | int | float) -> Expr"),
           "Invoke the symbolic function with the provided scalar expressions, and return a "
           "new scalar expression.")
       .doc() =
       "A scalar-valued symbolic function. Used to construct expressions of undefined functions.";
 
   m.def("substitution", &substitution::create, py::arg("input"), py::arg("target"),
-        py::arg("replacement"), docstrings::substitution.data());
+        py::arg("replacement"),
+        py::sig("def substitution(input: Expr, target: Expr, replacement: Expr | int | float) -> "
+                "Expr"),
+        docstrings::substitution.data());
   m.def("derivative", &derivative::create, py::arg("function"), py::arg("arg"),
         py::arg("order") = 1, docstrings::derivative.data());
 

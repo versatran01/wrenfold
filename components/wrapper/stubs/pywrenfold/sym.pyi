@@ -40,14 +40,14 @@ class BooleanExpr:
         """Arguments of ``self`` as a tuple."""
 
     @overload
-    def subs(self, target: Expr, substitute: Expr) -> BooleanExpr:
+    def subs(self, target: Expr, substitute: Expr | int | float) -> BooleanExpr:
         """See :func:`wrenfold.sym.subs`"""
 
     @overload
     def subs(self, target: BooleanExpr, substitute: BooleanExpr) -> BooleanExpr: ...
 
     @overload
-    def subs(self, pairs: Sequence[tuple[Expr, Expr] | tuple[BooleanExpr, BooleanExpr]]) -> BooleanExpr: ...
+    def subs(self, pairs: Sequence[tuple[Expr, Expr | int | float] | tuple[BooleanExpr, BooleanExpr]]) -> BooleanExpr: ...
 
     def __bool__(self) -> bool:
         """Coerce expression to boolean."""
@@ -156,11 +156,11 @@ class Expr:
         """See :func:`wrenfold.sym.distribute`."""
 
     @overload
-    def subs(self, pairs: Sequence[tuple[Expr, Expr] | tuple[BooleanExpr, BooleanExpr]]) -> Expr:
+    def subs(self, pairs: Sequence[tuple[Expr, Expr | int | float] | tuple[BooleanExpr, BooleanExpr]]) -> Expr:
         """See :func:`wrenfold.sym.subs`."""
 
     @overload
-    def subs(self, target: Expr, substitute: Expr) -> Expr:
+    def subs(self, target: Expr, substitute: Expr | int | float) -> Expr:
         """
         Overload of ``subs`` that performs a single scalar-valued substitution.
         """
@@ -549,7 +549,7 @@ def unique_symbols(count: int, real: bool = False, positive: bool = False, nonne
       $u_3
     """
 
-def compare(a: Expr, b: Expr) -> int:
+def compare(a: Expr | int | float, b: Expr | int | float) -> int:
     """
     Determine relative ordering of two scalar-valued expressions. Note that this is *not* a
     mathematical ordering. Expressions are first ordered by their expression type, and then by the
@@ -578,7 +578,7 @@ def compare(a: Expr, b: Expr) -> int:
       1
     """
 
-def log(arg: Expr) -> Expr:
+def log(arg: Expr | int | float) -> Expr:
     r"""
     The natural logarithm :math:`\ln{x}`.
 
@@ -595,7 +595,7 @@ def log(arg: Expr) -> Expr:
       0
     """
 
-def exp(arg: Expr) -> Expr:
+def exp(arg: Expr | int | float) -> Expr:
     r"""
     The exponential function :math:`e^{x}` or :math:`\exp{x}`.
 
@@ -612,7 +612,7 @@ def exp(arg: Expr) -> Expr:
       sym.E
     """
 
-def pow(base: Expr, exp: Expr) -> Expr:
+def pow(base: Expr | int | float, exp: Expr | int | float) -> Expr:
     r"""
     Construct a power expression: :math:`\text{pow}\left(x, y\right) \rightarrow x^y`.
 
@@ -651,7 +651,7 @@ def pow(base: Expr, exp: Expr) -> Expr:
       (x**2)**(1/2)
     """
 
-def cos(arg: Expr) -> Expr:
+def cos(arg: Expr | int | float) -> Expr:
     r"""
     The cosine function :math:`\cos{x}`.
 
@@ -666,7 +666,7 @@ def cos(arg: Expr) -> Expr:
       -1
     """
 
-def sin(arg: Expr) -> Expr:
+def sin(arg: Expr | int | float) -> Expr:
     r"""
     The sine function :math:`\sin{x}`.
 
@@ -681,7 +681,7 @@ def sin(arg: Expr) -> Expr:
       0
     """
 
-def tan(arg: Expr) -> Expr:
+def tan(arg: Expr | int | float) -> Expr:
     r"""
     The tangent function :math:`\tan{x}`.
 
@@ -696,7 +696,7 @@ def tan(arg: Expr) -> Expr:
       zoo
     """
 
-def acos(arg: Expr) -> Expr:
+def acos(arg: Expr | int | float) -> Expr:
     r"""
     The inverse cosine function :math:`\cos^{-1}{x}`.
 
@@ -708,7 +708,7 @@ def acos(arg: Expr) -> Expr:
       pi/2
     """
 
-def asin(arg: Expr) -> Expr:
+def asin(arg: Expr | int | float) -> Expr:
     r"""
     The inverse sine function :math:`\sin^{-1}{x}`.
 
@@ -720,7 +720,7 @@ def asin(arg: Expr) -> Expr:
       -pi/2
     """
 
-def atan(arg: Expr) -> Expr:
+def atan(arg: Expr | int | float) -> Expr:
     r"""
     The inverse tangent function :math:`\tan^{-1}{x}`.
 
@@ -732,7 +732,7 @@ def atan(arg: Expr) -> Expr:
       -atan(x)
     """
 
-def cosh(arg: Expr) -> Expr:
+def cosh(arg: Expr | int | float) -> Expr:
     r"""
     The hyperbolic cosine function :math:`\cosh{x}`.
 
@@ -744,7 +744,7 @@ def cosh(arg: Expr) -> Expr:
       cos(x)
     """
 
-def sinh(arg: Expr) -> Expr:
+def sinh(arg: Expr | int | float) -> Expr:
     r"""
     The hyperbolic sine function :math:`\sinh{x}`.
 
@@ -756,7 +756,7 @@ def sinh(arg: Expr) -> Expr:
       I*sin(x)
     """
 
-def tanh(arg: Expr) -> Expr:
+def tanh(arg: Expr | int | float) -> Expr:
     r"""
     The hyperbolic tangent function :math:`\tanh{x}`.
 
@@ -768,7 +768,7 @@ def tanh(arg: Expr) -> Expr:
       I*tan(x)
     """
 
-def acosh(arg: Expr) -> Expr:
+def acosh(arg: Expr | int | float) -> Expr:
     r"""
     The inverse hyperbolic cosine function :math:`\cosh^{-1}{x}`.
 
@@ -778,7 +778,7 @@ def acosh(arg: Expr) -> Expr:
       acosh(x)
     """
 
-def asinh(arg: Expr) -> Expr:
+def asinh(arg: Expr | int | float) -> Expr:
     r"""
     The inverse hyperbolic sine function :math:`\sinh^{-1}{x}`.
 
@@ -788,7 +788,7 @@ def asinh(arg: Expr) -> Expr:
       asinh(x)
     """
 
-def atanh(arg: Expr) -> Expr:
+def atanh(arg: Expr | int | float) -> Expr:
     r"""
     The inverse hyperbolic tangent function :math:`\tanh^{-1}{x}`.
 
@@ -798,12 +798,12 @@ def atanh(arg: Expr) -> Expr:
       atanh(x)
     """
 
-def sqrt(arg: Expr) -> Expr:
+def sqrt(arg: Expr | int | float) -> Expr:
     r"""
     The square root function :math:`\sqrt{x}`. This is an alias for ``sym.pow(x, sym.rational(1, 2))``.
     """
 
-def abs(arg: Expr) -> Expr:
+def abs(arg: Expr | int | float) -> Expr:
     r"""
     The absolute value function :math:`\lvert x \rvert`.
 
@@ -817,7 +817,7 @@ def abs(arg: Expr) -> Expr:
       x/abs(x)
     """
 
-def sign(arg: Expr) -> Expr:
+def sign(arg: Expr | int | float) -> Expr:
     r"""
     The sign/signum function :math:`\text{sign}\left(x\right)`, defined as:
 
@@ -852,7 +852,7 @@ def sign(arg: Expr) -> Expr:
       -1
     """
 
-def floor(arg: Expr) -> Expr:
+def floor(arg: Expr | int | float) -> Expr:
     r"""
     The floor function, sometimes written as :math:`\lfloor x \rfloor` or
     :math:`\text{floor}\left(x\right)`. This function returns the largest integer such that
@@ -874,7 +874,7 @@ def floor(arg: Expr) -> Expr:
        floor(x)
     """
 
-def atan2(y: Expr, x: Expr) -> Expr:
+def atan2(y: Expr | int | float, x: Expr | int | float) -> Expr:
     r"""
     Two-argument inverse tangent function :math:`\text{atan2}\left(y, x\right)`. Returns the angle
     :math:`\theta \in [-\pi, \pi]` such that:
@@ -938,7 +938,7 @@ def min(a: Expr | int | float, b: Expr | int | float) -> Expr:
     """
 
 @overload
-def where(c: BooleanExpr, a: Expr, b: Expr) -> Expr:
+def where(c: BooleanExpr, a: Expr | int | float, b: Expr | int | float) -> Expr:
     r"""
     ``where(c, a, b)`` will select between either ``a`` or ``b``, depending on the boolean-valued
     expression ``c``. When ``c`` is true, ``a`` is returned, otherwise ``b`` is returned:
@@ -1076,7 +1076,7 @@ def iverson(arg: BooleanExpr) -> Expr:
       1
     """
 
-def unevaluated(arg: Expr) -> Expr:
+def unevaluated(arg: Expr | int | float) -> Expr:
     """
     Wrap a scalar-valued expression to prevent automatic simplifications/combinations in downstream
     operations. This is similar in intent to SymPy's ``UnevaluatedExpr``.
@@ -1093,7 +1093,7 @@ def unevaluated(arg: Expr) -> Expr:
       y*(x) + (x*y)
     """
 
-def stop_derivative(arg: Expr) -> Expr:
+def stop_derivative(arg: Expr | int | float) -> Expr:
     """
     Wrap a scalar-valued expression in order to block propagation of derivatives. ``stop_derivative``
     acts like a function whose derivative is always zero.
@@ -1160,10 +1160,10 @@ I: Expr = ...
 
 nan: Expr = ...
 
-def addition(args: Sequence[Expr]) -> Expr:
+def addition(args: Sequence[Expr | int | float]) -> Expr:
     """Construct addition expression from provided operands."""
 
-def multiplication(args: Sequence[Expr]) -> Expr:
+def multiplication(args: Sequence[Expr | int | float]) -> Expr:
     """Construct multiplication expression from provided operands."""
 
 class Function:
@@ -1210,12 +1210,12 @@ class Function:
 
     def __repr__(self) -> str: ...
 
-    def __call__(self, *args) -> Expr:
+    def __call__(self, *args: Expr | int | float) -> Expr:
         """
         Invoke the symbolic function with the provided scalar expressions, and return a new scalar expression.
         """
 
-def substitution(input: Expr, target: Expr, replacement: Expr) -> Expr:
+def substitution(input: Expr, target: Expr, replacement: Expr | int | float) -> Expr:
     """
     Create a deferred substitution expression.
 
@@ -1339,7 +1339,7 @@ class MatrixExpr:
         """Invoke :func:`wrenfold.sym.distribute` on every element of the matrix."""
 
     @overload
-    def subs(self, target: Expr, substitute: Expr) -> MatrixExpr:
+    def subs(self, target: Expr, substitute: Expr | int | float) -> MatrixExpr:
         """
         Overload of ``subs`` that performs a single scalar-valued substitution.
         """
@@ -1351,7 +1351,7 @@ class MatrixExpr:
         """
 
     @overload
-    def subs(self, pairs: Sequence[tuple[Expr, Expr] | tuple[BooleanExpr, BooleanExpr]]) -> MatrixExpr:
+    def subs(self, pairs: Sequence[tuple[Expr, Expr | int | float] | tuple[BooleanExpr, BooleanExpr]]) -> MatrixExpr:
         """Invoke :func:`wrenfold.sym.subs` on every element of the matrix."""
 
     def eval(self) -> Annotated[NDArray[numpy.int64], dict(shape=(None, None), order='C')] | Annotated[NDArray[numpy.float64], dict(shape=(None, None), order='C')] | Annotated[NDArray[numpy.complex128], dict(shape=(None, None), order='C')]:
@@ -1890,7 +1890,7 @@ def distribute(expr: Expr | MatrixExpr | CompoundExpr | BooleanExpr) -> Expr | M
     """
 
 @overload
-def subs(expr: Expr | MatrixExpr | CompoundExpr | BooleanExpr, pairs: Sequence[tuple[Expr, Expr] | tuple[BooleanExpr, BooleanExpr]]) -> Expr | MatrixExpr | CompoundExpr | BooleanExpr:
+def subs(expr: Expr | MatrixExpr | CompoundExpr | BooleanExpr, pairs: Sequence[tuple[Expr, Expr | int | float] | tuple[BooleanExpr, BooleanExpr]]) -> Expr | MatrixExpr | CompoundExpr | BooleanExpr:
     """
     Traverse the expression tree and replace target expressions with corresponding substitutions. The
     list of replacements is executed *in order*, such that substitutions that appear later in the list
@@ -1915,7 +1915,7 @@ def subs(expr: Expr | MatrixExpr | CompoundExpr | BooleanExpr, pairs: Sequence[t
     """
 
 @overload
-def subs(expr: Expr | MatrixExpr | CompoundExpr | BooleanExpr, target: Expr, replacement: Expr) -> Expr | MatrixExpr | CompoundExpr | BooleanExpr:
+def subs(expr: Expr | MatrixExpr | CompoundExpr | BooleanExpr, target: Expr, replacement: Expr | int | float) -> Expr | MatrixExpr | CompoundExpr | BooleanExpr:
     """
     Overload of ``subs`` that performs a single scalar-valued substitution.
     """

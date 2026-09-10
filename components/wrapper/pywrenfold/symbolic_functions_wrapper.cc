@@ -26,9 +26,15 @@ void wrap_symbolic_functions(py::module_& m) {
         wf::docstrings::distribute.data());
 
   m.def("subs", &substitute_wrapper<any_const_ptr_to_expression>, py::arg("expr"), py::arg("pairs"),
+        py::sig("def subs(expr: Expr | MatrixExpr | CompoundExpr | BooleanExpr, pairs: "
+                "typing.Sequence[tuple[Expr, Expr | int | float] | tuple[BooleanExpr, "
+                "BooleanExpr]]) -> Expr | MatrixExpr | CompoundExpr | BooleanExpr"),
         wf::docstrings::subs.data());
   m.def("subs", make_substitute_wrapper_single<any_const_ptr_to_expression, scalar_expr>(),
         py::arg("expr"), py::arg("target"), py::arg("replacement"),
+        py::sig("def subs(expr: Expr | MatrixExpr | CompoundExpr | BooleanExpr, target: Expr, "
+                "replacement: Expr | int | float) -> Expr | MatrixExpr | CompoundExpr | "
+                "BooleanExpr"),
         "Overload of ``subs`` that performs a single scalar-valued substitution.");
   m.def("subs", make_substitute_wrapper_single<any_const_ptr_to_expression, boolean_expr>(),
         py::arg("expr"), py::arg("target"), py::arg("replacement"),

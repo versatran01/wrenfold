@@ -48,7 +48,11 @@ static auto eval_quaternion(const quaternion& q) {
 void wrap_geometry_operations(py::module_& m) {
   wrap_class<quaternion>(m, "Quaternion")
       .def(py::init<scalar_expr, scalar_expr, scalar_expr, scalar_expr>(), "w"_a, "x"_a, "y"_a,
-           "z"_a, docstrings::quaternion_constructor.data())
+           "z"_a,
+           py::sig("def __init__(self, w: pywrenfold.sym.Expr | int | float, x: "
+                   "pywrenfold.sym.Expr | int | float, y: pywrenfold.sym.Expr | int | float, z: "
+                   "pywrenfold.sym.Expr | int | float) -> None"),
+           docstrings::quaternion_constructor.data())
       .def(py::init<>(), docstrings::quaternion_identity_constructor.data())
       .def_static(
           "with_name",
@@ -65,6 +69,8 @@ void wrap_geometry_operations(py::module_& m) {
            })
       // Expression operations:
       .def("subs", &quaternion::subs, py::arg("target"), py::arg("replacement"),
+           py::sig("def subs(self, target: pywrenfold.sym.Expr, replacement: "
+                   "pywrenfold.sym.Expr | int | float) -> Quaternion"),
            "Invoke :func:`wrenfold.sym.Expr.subs` on every element of the quaternion.")
       .def("eval", &eval_quaternion, docstrings::quaternion_eval.data())
       // Storage conversions:
@@ -87,6 +93,8 @@ void wrap_geometry_operations(py::module_& m) {
             return quaternion{xyzw[3], xyzw[0], xyzw[1], xyzw[2]};
           },
           "xyzw"_a,
+          py::sig("def from_xyzw(xyzw: typing.Iterable[pywrenfold.sym.Expr | int | float]) -> "
+                  "Quaternion"),
           "Overload of :func:`wrenfold.geometry.Quaternion.from_xyzw` that accepts "
           "Iterable[sym.Expr].")
       .def_static("from_wxyz", &quaternion::from_vector_wxyz, "wxyz"_a,
@@ -98,6 +106,8 @@ void wrap_geometry_operations(py::module_& m) {
             return quaternion{wxyz[0], wxyz[1], wxyz[2], wxyz[3]};
           },
           "wxyz"_a,
+          py::sig("def from_wxyz(wxyz: typing.Iterable[pywrenfold.sym.Expr | int | float]) -> "
+                  "Quaternion"),
           "Overload of :func:`wrenfold.geometry.Quaternion.from_wxyz` that accepts "
           "Iterable[sym.Expr].")
       // Quaternion operations:
@@ -116,11 +126,17 @@ void wrap_geometry_operations(py::module_& m) {
           "from_angle_axis",
           static_cast<quaternion (*)(const scalar_expr&, const scalar_expr&, const scalar_expr&,
                                      const scalar_expr&)>(&quaternion::from_angle_axis),
-          "angle"_a, "vx"_a, "vy"_a, "vz"_a, docstrings::quaternion_from_angle_axis.data())
+          "angle"_a, "vx"_a, "vy"_a, "vz"_a,
+          py::sig("def from_angle_axis(angle: pywrenfold.sym.Expr | int | float, vx: "
+                  "pywrenfold.sym.Expr | int | float, vy: pywrenfold.sym.Expr | int | float, "
+                  "vz: pywrenfold.sym.Expr | int | float) -> Quaternion"),
+          docstrings::quaternion_from_angle_axis.data())
       .def_static("from_angle_axis",
                   static_cast<quaternion (*)(const scalar_expr&, const matrix_expr&)>(
                       &quaternion::from_angle_axis),
                   "angle"_a, "axis"_a,
+                  py::sig("def from_angle_axis(angle: pywrenfold.sym.Expr | int | float, axis: "
+                          "pywrenfold.sym.MatrixExpr) -> Quaternion"),
                   "Overload of ``from_angle_axis`` that accepts ``sym.MatrixExpr`` for the axis.")
       .def_static(
           "from_rotation_vector",
@@ -141,10 +157,16 @@ void wrap_geometry_operations(py::module_& m) {
                   "pywrenfold.sym.Expr | int | float | None) -> Quaternion"),
           "Overload of ``from_rotation_vector`` that accepts ``sym.MatrixExpr``.")
       .def_static("from_x_angle", &quaternion::from_x_angle, "angle"_a,
+                  py::sig("def from_x_angle(angle: pywrenfold.sym.Expr | int | float) -> "
+                          "Quaternion"),
                   docstrings::quaternion_from_x_angle.data())
       .def_static("from_y_angle", &quaternion::from_y_angle, "angle"_a,
+                  py::sig("def from_y_angle(angle: pywrenfold.sym.Expr | int | float) -> "
+                          "Quaternion"),
                   docstrings::quaternion_from_y_angle.data())
       .def_static("from_z_angle", &quaternion::from_z_angle, "angle"_a,
+                  py::sig("def from_z_angle(angle: pywrenfold.sym.Expr | int | float) -> "
+                          "Quaternion"),
                   docstrings::quaternion_from_z_angle.data())
       .def("to_angle_axis", &quaternion::to_angle_axis, py::arg("epsilon").none() = constants::zero,
            py::sig("def to_angle_axis(self, epsilon: pywrenfold.sym.Expr | int | float | None = "
