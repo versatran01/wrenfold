@@ -97,8 +97,14 @@ void wrap_argument(py::module_& m) {
 void wrap_codegen_operations(py::module_& m) {
   // We give this a Py prefix since we subclass it in python with another object.
   wrap_class<external_function>(m, "PyExternalFunction")
-      .def("__init__", &init_external_function, py::arg("name"), py::arg("arguments"),
-           py::arg("return_type"), "Construct with name, arguments, and return type.")
+      .def(
+          "__init__", &init_external_function, py::arg("name"), py::arg("arguments"),
+          py::arg("return_type"),
+          py::sig("def __init__(self, name: str, arguments: typing.Sequence[tuple[str, "
+                  "pywrenfold.type_info.ScalarType | pywrenfold.type_info.MatrixType | "
+                  "pywrenfold.type_info.CustomType]], return_type: pywrenfold.type_info.ScalarType "
+                  "| pywrenfold.type_info.MatrixType | pywrenfold.type_info.CustomType) -> None"),
+          "Construct with name, arguments, and return type.")
       .def(py::init<external_function>(), "Copy constructor.")
       .def_prop_ro("name", &external_function::name, "Name of the function.")
       .def_prop_ro("arguments", &external_function::arguments, "List of arguments.")
@@ -110,6 +116,11 @@ void wrap_codegen_operations(py::module_& m) {
                    "Return type of the function. This will determine the type of "
                    "variable we must declare in code-generated functions.")
       .def("call", &call_external_function, py::arg("args"),
+           py::sig("def call(self, args: list[pywrenfold.sym.Expr | "
+                   "pywrenfold.sym.MatrixExpr | pywrenfold.sym.CompoundExpr | "
+                   "pywrenfold.sym.BooleanExpr]) -> pywrenfold.sym.Expr | "
+                   "pywrenfold.sym.MatrixExpr | pywrenfold.sym.CompoundExpr | "
+                   "pywrenfold.sym.BooleanExpr"),
            "Call external function and create return expression. OMIT_FROM_SPHINX")
       .def("__repr__",
            [](const external_function& self) {

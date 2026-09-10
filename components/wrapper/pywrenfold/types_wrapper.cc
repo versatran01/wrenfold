@@ -86,7 +86,10 @@ void wrap_types(py::module_& m) {
 
   wrap_class<custom_type>(m, "CustomType")
       .def("__init__", &init_custom_type, py::arg("name"), py::arg("fields"),
-           py::arg("python_type"), "Construct custom type.")
+           py::arg("python_type"),
+           py::sig("def __init__(self, name: str, fields: typing.Sequence[tuple[str, ScalarType "
+                   "| MatrixType | CustomType]], python_type: type[typing.Any]) -> None"),
+           "Construct custom type.")
       .def_prop_ro("name", &custom_type::name, "Name of the struct.")
       .def_prop_ro("fields", &custom_type::fields,
                    "A list of :class:`wrenfold.type_info.StructField` objects.")
@@ -101,6 +104,7 @@ void wrap_types(py::module_& m) {
             }
             return std::nullopt;
           },
+          py::sig("def python_type(self) -> type[typing.Any] | None"),
           "Retrieve the underlying user-declared python type. May be None.")
       .def("__repr__",
            [](const custom_type& self) {

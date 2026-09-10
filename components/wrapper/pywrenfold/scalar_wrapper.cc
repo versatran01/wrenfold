@@ -184,6 +184,7 @@ void wrap_scalar_operations(py::module_& m) {
           docstrings::scalar_expr_type_name.data())
       .def_prop_ro(
           "args", [](const scalar_expr& self) { return args_visitor{}(self); },
+          py::sig("def args(self) -> tuple[Expr | BooleanExpr, ...]"),
           "Arguments of ``self`` as a tuple.")
       // Operations:
       .def(

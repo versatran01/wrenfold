@@ -41,6 +41,7 @@ void wrap_boolean_expression(py::module_& m) {
           ":func:`wrenfold.sym.Expr.type_name`.")
       .def_prop_ro(
           "args", [](const boolean_expr& self) { return args_visitor{}(self); },
+          py::sig("def args(self) -> tuple[Expr | BooleanExpr, ...]"),
           "Arguments of ``self`` as a tuple.")
       .def("subs", make_substitute_wrapper_single<boolean_expr, scalar_expr>(), py::arg("target"),
            py::arg("substitute"),

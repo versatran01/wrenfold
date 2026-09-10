@@ -318,7 +318,10 @@ void wrap_matrix_operations(py::module_& m) {
           [](matrix_expr* out, const py::iterable& rows) {
             new (out) matrix_expr(matrix_from_iterable(rows));
           },
-          py::arg("rows"), "Construct from an iterable of values. See :func:`wrenfold.sym.matrix`.")
+          py::arg("rows"),
+          py::sig("def __init__(self, rows: typing.Iterable[Expr | int | float | "
+                  "typing.Iterable[Expr | int | float] | MatrixExpr]) -> None"),
+          "Construct from an iterable of values. See :func:`wrenfold.sym.matrix`.")
       // scalar_expr inherited properties:
       .def("__repr__", &matrix_expr::to_string)
       .def("expression_tree_str", &matrix_expr::to_expression_tree_string,
@@ -440,7 +443,8 @@ void wrap_matrix_operations(py::module_& m) {
           [](const matrix_expr& self, const matrix_expr& other) { return hstack({self, other}); },
           "other"_a, docstrings::matrix_expr_row_join.data())
       // Convert to list
-      .def("to_list", &list_from_matrix, "Convert to a list of lists.")
+      .def("to_list", &list_from_matrix, py::sig("def to_list(self) -> list[list[Expr]]"),
+           "Convert to a list of lists.")
       .def("to_flat_list", &flat_list_from_matrix,
            "Convert to a flat list assembled in the storage order (row-major) of the matrix.")
       .def("transpose", &matrix_expr::transposed, docstrings::matrix_expr_transpose.data())
@@ -494,7 +498,10 @@ void wrap_matrix_operations(py::module_& m) {
   m.def("row_vector", &row_vector_from_container<py::args>,
         py::sig("def row_vector(*args: Expr | int | float) -> MatrixExpr"),
         docstrings::row_vector.data());
-  m.def("matrix", &matrix_from_iterable, py::arg("rows"), docstrings::matrix.data());
+  m.def("matrix", &matrix_from_iterable, py::arg("rows"),
+        py::sig("def matrix(rows: typing.Iterable[Expr | int | float | typing.Iterable[Expr | int "
+                "| float] | MatrixExpr]) -> MatrixExpr"),
+        docstrings::matrix.data());
   m.def("matrix_of_symbols", &make_matrix_of_symbols, py::arg("prefix"), py::arg("rows"),
         py::arg("cols"), docstrings::matrix_of_symbols.data());
 
